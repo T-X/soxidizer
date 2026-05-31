@@ -55,9 +55,9 @@ Features which probably won't be implemented:
 
 This works like this:
 
-1. soxidizer accepts connection on some UDS socks (eg. `/run/user/${PID}/soxidizer.socks`);
+1. soxidizer accepts connection on some UDS socks (eg. `/run/user/${UID}/soxidizer.socks`);
 2. soxidizer receives a SOCKS5 proxy (CONNECT) request from the client;
-3. soxidizer translates this request into a pathname of the form `{directory}/{hostname}_{port}` (eg. `/run/user/${PID}/publish/myapp.john.local_443`) and connects to this socket;
+3. soxidizer translates this request into a pathname of the form `{directory}/{hostname}_{port}` (eg. `/run/user/${UID}/publish/myapp.john.local_443`) and connects to this socket;
 4. soxidizer relays data between the client and the service.
 
 This currently requires a client which supports SOCKS5 over UDS.
@@ -87,7 +87,7 @@ soxidizer "${XDG_RUNTIME_DIR}/soxidizer.socks" --directory "${XDG_RUNTIME_DIR}/p
 ~~~
 
 You should use a dedicated directory for storing the sockets of the published services.
-Do *not* use a directory which contains other unrelated UDS (such as `${XDG_RUNTIME_DIR}` / `/var/run/${PID}`)
+Do *not* use a directory which contains other unrelated UDS (such as `${XDG_RUNTIME_DIR}` / `/var/run/${UID}`)
 in order to make sure the proxy does not provide access to unrelated services.
 
 Alternatively (or in addition), you can listen on a TCP socket:
@@ -223,7 +223,7 @@ Note: `__Secure-` cookies are available on Firefox from `http://*.localhost:*` o
 You can configure Firefox to use a UDS-based SOCKS proxy.
 In the Network configuration:,
 
-* usa a value of the form `file:///run/user/${PID}/soxidizer.socks` in SOCKS proxy;
+* usa a value of the form `file:///run/user/${UID}/soxidizer.socks` in SOCKS proxy;
 * choose SOCKS5;
 * the port is ignored.
 
@@ -254,7 +254,7 @@ Sdd a new Proxy in the "proxies" tab:
 
 * make sure the proxy is enabled;
 * choose "SOCKS5" for the proxy type;
-* in hostname use an address of the form `file:///run/user/${PID}/soxidizer.socks`;
+* in hostname use an address of the form `file:///run/user/${UID}/soxidizer.socks`;
 * the port is ignored but you must enter a value port number.
 
 Add a pattern for this proxy:
