@@ -171,10 +171,10 @@ systemctl --user start soxidizer.socket
 ### Protection from other local users
 
 On Linux, filesystem permissions are enforced for UDS:
-a user can only connect to a (non-asbtract) UDS socket
+a user can only connect to a (non-abstract) UDS socket
 if it has executable permissions on all parent directories and if it has write permission on the socket.
-Storing the SOCKS5 socket under `${XDG_RUNTIME_DIR}` and using a subdirectory or `${XDG_RUNTIME_DIR}`
-for services prevents other users from accessing them.
+Storing the SOCKS5 socket under `${XDG_RUNTIME_DIR}` and using a protected subdirectory or `${XDG_RUNTIME_DIR}`
+for service sockets prevents other users from accessing them directly.
 
 On other Unix systems, Soxidizer can be configured to check the user ID associated with incoming UDS connections.
 The services would need to support a similar functionality in order to prevent other users from accessing them.
@@ -189,7 +189,7 @@ you should make sure your services are not vulnerable to CSRF attacks.
 
 DNS rebinding attacks should not be possible if the services are only available over Unix domain sockets.
 
-### Cookie hikjacking
+### Cookie hijacking
 
 If you serve your web application using `http://127.0.0.1:8000`,
 your application cookies (if any) are *not safe from other local users*.
@@ -199,7 +199,7 @@ Your browser would then send your cookies associated with `http://127.0.0.1:8000
 The malicious user could then use your session on your application.
 
 By serving each application in a dedicated host name,
-we can prevent different application from seing each others cookies.
+we can prevent different application from seeing each others cookies.
 
 ### Cookies poisoning
 
@@ -371,7 +371,7 @@ If the remote service is available over TCP:
 ssh target -N -L "${XDG_RUNTIME_DIR}/publish/app.foo.local_80:localhost:80"
 ~~~
 
-If the remote sevice is available over UDS:
+If the remote service is available over UDS:
 
 ~~~sh
 ssh target -N -L "${XDG_RUNTIME_DIR}/publish/app.foo.local_80:/run/foo.sock
@@ -428,10 +428,11 @@ Firefox and its derivative are the only browsers
 which can talk to a SOCKS proxy over UDS.
 
 We can have Soxidizer listen on TCP localhost instead.
-In this case, we currently cannot prevent other local users from accessing the services
-(on Linux, we could try to use `/proc/net/tcp` in order to find the UID of the peer
-but I am afraid this could be vulnerable to time-of-check to time-of-use race conditions).
-Chrome [does not support authentication for SOCKS5](https://chromium.googlesource.com/chromium/src/+/HEAD/net/docs/proxy.md#SOCKSv5-proxy-scheme).
+In this case, we currently cannot prevent other local users from accessing the services.
+On Linux, we could try to use `/proc/net/tcp` in order to find the UID of the peer
+but I am afraid this could be vulnerable to time-of-check to time-of-use race conditions.
+Another solution would be to use SOCKS authentication
+but Chrome [does not support authentication for SOCKS5](https://chromium.googlesource.com/chromium/src/+/HEAD/net/docs/proxy.md#SOCKSv5-proxy-scheme).
 
 
 ## References
