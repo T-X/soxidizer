@@ -233,6 +233,13 @@ which currently does not support proxying to TCP/UDP.
 Only your web sites will be handled by the proxy.
 The solution is to install FoxyProxy standard (or a similar extension).
 
+In recent version of Firefox, proxy is disabled for `localhost` and `*.localhost`.
+If you want to use proxy with localhost you must change, in `about:config` (use at your own risk):
+
+~~~
+network.proxy.allow_hijacking_localhost = true
+~~~
+
 Note: it is not possible to configure UDS proxy using Proxy Auto-Configuration (`proxy.pac`).
 
 ### Firefox with FoxyProxy Standard
@@ -265,6 +272,8 @@ Add a pattern for this proxy:
 * make sure it is enabled,
 
 Select the "proxy by patterns" mode in order for the pattern to be honored.
+
+See the previous section for allowing proxy support for localhost.
 
 ### CURL
 
